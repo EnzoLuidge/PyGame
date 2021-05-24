@@ -13,6 +13,8 @@ pygame.display.set_caption('Guitarzao')
 #Assets
 button_width = 64
 button_height = 64
+button_x = -button_width
+button_y = 240-button_height/2
 
 def load_assets():
     assets = {}
@@ -124,9 +126,9 @@ setaleft = seta_left()
 setadown = seta_down()
 setaright = seta_right()
 setaup = seta_up()
+setaleftspace = seta_left_space()
 
-button_x = -button_width
-button_y = 240-button_height/2
+
 
 while game:
 
@@ -156,8 +158,8 @@ while game:
     window.blit(setaup.image,setaup.rect)
     window.blit(setaright.image,setaright.rect)
     window.blit(setadown.image,setadown.rect)
-    
-    window.blit(assets['left_space'], (325-button_width,button_y))
+
+    window.blit(setaleftspace.image, setaleftspace.rect)
     window.blit(assets['up_space'], (360-button_width/2,button_y-button_width))
     window.blit(assets['down_space'], (360-button_width/2,button_y+button_width))
     window.blit(assets['right_space'], (370+button_width/2,button_y))
