@@ -111,6 +111,26 @@ class seta_left_space(pygame.sprite.Sprite):
         self.rect.x = 325-button_width
         self.rect.y = button_y
 
+class seta_up_space(pygame.sprite.Sprite):
+    def __init__(self):
+        self.image = assets['up_space']
+        self.rect = self.image.get_rect()
+        self.rect.x = 360-button_width
+        self.rect.y = button_y-button_width
+
+class seta_down_space(pygame.sprite.Sprite):
+    def __init__(self):
+        self.image = assets['down_space']
+        self.rect = self.image.get_rect()
+        self.rect.x = 360-button_width/2
+        self.rect.y = button_y+button_width
+
+class seta_right_space(pygame.sprite.Sprite):
+    def __init__(self):
+        self.image = assets['right_space']
+        self.rect = self.image.get_rect()
+        self.rect.x = 370+button_width/2
+        self.rect.y = button_y
 
 game = True
 
@@ -127,7 +147,9 @@ setadown = seta_down()
 setaright = seta_right()
 setaup = seta_up()
 setaleftspace = seta_left_space()
-
+setaupspace = seta_up_space()
+setarightspace = seta_right_space()
+setadownspace = seta_down_space()
 
 
 while game:
@@ -139,11 +161,6 @@ while game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game = False
-    if event.type == pygame.KEYDOWN:
-        window.blit(assets['left'], (button_x,button_y))
-
-    if button_x >=360-button_width:
-        button_x = -button_width
     
     ##dando update nas classes de seta
     setaleft.update()
@@ -159,10 +176,11 @@ while game:
     window.blit(setaright.image,setaright.rect)
     window.blit(setadown.image,setadown.rect)
 
+    ##mostrando a imagem das setas vazias
     window.blit(setaleftspace.image, setaleftspace.rect)
-    window.blit(assets['up_space'], (360-button_width/2,button_y-button_width))
-    window.blit(assets['down_space'], (360-button_width/2,button_y+button_width))
-    window.blit(assets['right_space'], (370+button_width/2,button_y))
+    window.blit(setaupspace.image,setaupspace.rect)
+    window.blit(setadownspace.image,setadownspace.rect)
+    window.blit(setarightspace.image, setarightspace.rect)
     
     
 
