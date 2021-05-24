@@ -108,29 +108,29 @@ class seta_left_space(pygame.sprite.Sprite):
     def __init__(self):
         self.image = assets['left_space']
         self.rect = self.image.get_rect()
-        self.rect.x = WIDTH/3
-        self.rect.y = button_y+button_width
+        self.rect.centerx = WIDTH/2-button_width
+        self.rect.centery = HEIGHT/2
 
 class seta_up_space(pygame.sprite.Sprite):
     def __init__(self):
         self.image = assets['up_space']
         self.rect = self.image.get_rect()
-        self.rect.x = WIDTH/2.24
-        self.rect.y = HEIGHT/3
+        self.rect.centerx = WIDTH/2
+        self.rect.centery = HEIGHT/2-button_height
 
 class seta_down_space(pygame.sprite.Sprite):
     def __init__(self):
         self.image = assets['down_space']
         self.rect = self.image.get_rect()
-        self.rect.x = HEIGHT/2.24
-        self.rect.y = HEIGHT/1.8
+        self.rect.centerx = WIDTH/2
+        self.rect.centery = HEIGHT/2+button_height
 
 class seta_right_space(pygame.sprite.Sprite):
     def __init__(self):
         self.image = assets['right_space']
         self.rect = self.image.get_rect()
-        self.rect.x = WIDTH/2+button_width/2
-        self.rect.y = button_y+button_width
+        self.rect.centerx = WIDTH/2+button_width
+        self.rect.centery = HEIGHT/2
 
 game = True
 
