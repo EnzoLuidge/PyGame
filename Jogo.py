@@ -5,8 +5,8 @@ pygame.init()
 
 
 #Gera a tela
-WIDTH = 720   
-HEIGHT = 480
+WIDTH = 600   
+HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Guitarzao')
 
@@ -49,29 +49,29 @@ class seta_left(pygame.sprite.Sprite):
         self.image = assets['left']
         self.rect = self.image.get_rect()
         self.rect.x = -button_width
-        self.rect.y = 240-button_height/2
+        self.rect.centery = HEIGHT/2
         self.speedx = 3
         self.speedy = 3
 
     def update(self):
         # Atualizando a posição da seta
         self.rect.x += self.speedx
-        if self.rect.x >= 265:
+        if self.rect.centerx >= WIDTH/2-button_width:
             self.rect.x = -button_width
 
 class seta_up(pygame.sprite.Sprite):
     def __init__(self):
         self.image = assets['up']
         self.rect = self.image.get_rect()
-        self.rect.x = 360-button_height/2
-        self.rect.y = -button_width
+        self.rect.centerx = WIDTH/2
+        self.rect.y = -button_height
         self.speedx = 3
         self.speedy = 3
 
     def update(self):
         # Atualizando a posição da seta
         self.rect.y += self.speedy
-        if self.rect.y >= 150:
+        if self.rect.centery >= HEIGHT/2-button_height:
             self.rect.y = -button_width
 
 class seta_right(pygame.sprite.Sprite):
@@ -79,30 +79,30 @@ class seta_right(pygame.sprite.Sprite):
         self.image = assets['right']
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH
-        self.rect.y = 240-button_height/2
+        self.rect.centery = WIDTH/2
         self.speedx = 3
         self.speedy = 3
 
     def update(self):
         # Atualizando a posição da seta
         self.rect.x -= self.speedx
-        if self.rect.x <= 390:
+        if self.rect.centerx <= WIDTH/2+button_width:
             self.rect.x = WIDTH
 
 class seta_down(pygame.sprite.Sprite):
     def __init__(self):
         self.image = assets['down']
         self.rect = self.image.get_rect()
-        self.rect.x = 360-button_height/2
-        self.rect.y = 480
+        self.rect.centerx = WIDTH/2
+        self.rect.y = HEIGHT
         self.speedx = 3
         self.speedy = 3
 
     def update(self):
         # Atualizando a posição da seta
         self.rect.y -= self.speedy
-        if self.rect.y <= 265:
-            self.rect.y = 480
+        if self.rect.centery <= HEIGHT/2+button_height:
+            self.rect.y = HEIGHT
 
 class seta_left_space(pygame.sprite.Sprite):
     def __init__(self):
