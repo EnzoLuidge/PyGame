@@ -41,11 +41,73 @@ def load_assets():
 
     return assets
 
+##definindo uma classe para cada uma das setas
+class seta_left(pygame.sprite.Sprite):
+    def __init__(self):
+        self.image = assets['left']
+        self.rect = self.image.get_rect()
+        self.rect.x = -button_width
+        self.rect.y = 240-button_height/2
+        self.speedx = 3
+        self.speedy = 3
 
-button_x = -button_width
-button_y = 240-button_height/2
-button_yspeed = 3
-button_xspeed = 5
+    def update(self):
+        # Atualizando a posição da seta
+        self.rect.x += self.speedx
+        if self.rect.x >= 265:
+            self.rect.x = -button_width
+
+class seta_up(pygame.sprite.Sprite):
+    def __init__(self):
+        self.image = assets['up']
+        self.rect = self.image.get_rect()
+        self.rect.x = 360-button_height/2
+        self.rect.y = -button_width
+        self.speedx = 3
+        self.speedy = 3
+
+    def update(self):
+        # Atualizando a posição da seta
+        self.rect.y += self.speedy
+        if self.rect.y >= 150:
+            self.rect.y = -button_width
+
+class seta_right(pygame.sprite.Sprite):
+    def __init__(self):
+        self.image = assets['right']
+        self.rect = self.image.get_rect()
+        self.rect.x = WIDTH
+        self.rect.y = 240-button_height/2
+        self.speedx = 3
+        self.speedy = 3
+
+    def update(self):
+        # Atualizando a posição da seta
+        self.rect.x -= self.speedx
+        if self.rect.x <= 390:
+            self.rect.x = WIDTH
+
+class seta_down(pygame.sprite.Sprite):
+    def __init__(self):
+        self.image = assets['down']
+        self.rect = self.image.get_rect()
+        self.rect.x = 360-button_height/2
+        self.rect.y = 480
+        self.speedx = 3
+        self.speedy = 3
+
+    def update(self):
+        # Atualizando a posição da seta
+        self.rect.y -= self.speedy
+        if self.rect.y <= 265:
+            self.rect.y = 480
+
+class seta_left_space(pygame.sprite.Sprite):
+    def __init__(self):
+        self.image = assets['left_space']
+        self.rect = self.image.get_rect()
+        self.rect.x = 325-button_width
+        self.rect.y = button_y
 
 
 game = True
@@ -56,21 +118,52 @@ FPS = 60
 #Loop principal
 assets = load_assets()
 pygame.mixer.music.play(loops=-1)
+
+##puxando as classes de seta
+setaleft = seta_left()
+setadown = seta_down()
+setaright = seta_right()
+setaup = seta_up()
+
+button_x = -button_width
+button_y = 240-button_height/2
+
 while game:
+
+    tempo_musica = pygame.mixer.music.get_pos()
+
+
     clock.tick(FPS)
     for event in pygame.event.get():
-        
         if event.type == pygame.QUIT:
             game = False
-    button_x +=button_xspeed
+    if event.type == pygame.KEYDOWN:
+        window.blit(assets['left'], (button_x,button_y))
+
     if button_x >=360-button_width:
         button_x = -button_width
+    
+    ##dando update nas classes de seta
+    setaleft.update()
+    setaup.update()
+    setaright.update()
+    setadown.update()
+
     window.fill((0, 0, 255))
+
+    ##mostrando a imagem das setas
+    window.blit(setaleft.image, setaleft.rect)
+    window.blit(setaup.image,setaup.rect)
+    window.blit(setaright.image,setaright.rect)
+    window.blit(setadown.image,setadown.rect)
+    
     window.blit(assets['left_space'], (325-button_width,button_y))
     window.blit(assets['up_space'], (360-button_width/2,button_y-button_width))
     window.blit(assets['down_space'], (360-button_width/2,button_y+button_width))
     window.blit(assets['right_space'], (370+button_width/2,button_y))
-    window.blit(assets['left'], (button_x,button_y))
+    
+    
+
     #window.blit(right_img_small, (button_x,button_y))
     pygame.display.update()
 pygame.quit()
