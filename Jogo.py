@@ -71,8 +71,9 @@ class seta_left(pygame.sprite.Sprite):
             self.last = pygame.time.get_ticks()
             # Se a diferença de tempo for menor que 100 milissegundos, é válido.
             
-            if self.last-self.now < 100:
+            if self.last-self.now < 1500:
                 self.state = True
+                print("fala zeze")
             else:
                 self.state = False
                 self.kill()
@@ -192,6 +193,9 @@ game = True
 clock = pygame.time.Clock()
 FPS = 60
 
+##definindo um grupo para todas as setas
+
+
 #Loop principal
 assets = load_assets()
 pygame.mixer.music.play(loops=-1)
@@ -206,6 +210,13 @@ setaupspace = seta_up_space()
 setarightspace = seta_right_space()
 setadownspace = seta_down_space()
 
+##criando um grupo de setas e armazenando todas as setas nele
+all_setas = pygame.sprite.Group()
+all_setas.add(setaleft)
+all_setas.add(setaright)
+all_setas.add(setaup)
+all_setas.add(setadown)
+
 
 while game:
 
@@ -218,10 +229,7 @@ while game:
             game = False
     
     ##dando update nas classes de seta
-    setaleft.update()
-    setaup.update()
-    setaright.update()
-    setadown.update()
+    all_setas.update()
 
     window.fill((0, 0, 255))
 
@@ -232,10 +240,7 @@ while game:
     window.blit(setarightspace.image, setarightspace.rect)
     
     ##mostrando a imagem das setas
-    window.blit(setaleft.image, setaleft.rect)
-    window.blit(setaup.image,setaup.rect)
-    window.blit(setaright.image,setaright.rect)
-    window.blit(setadown.image,setadown.rect)
+    all_setas.draw(window)
 
     #window.blit(right_img_small, (button_x,button_y))
     pygame.display.update()
