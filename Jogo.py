@@ -1,5 +1,6 @@
 ##inicialização
 import pygame
+from pygame.constants import K_LEFT
 
 pygame.init()
 
@@ -46,6 +47,11 @@ def load_assets():
 ##definindo uma classe para cada uma das setas
 class seta_left(pygame.sprite.Sprite):
     def __init__(self):
+        #variável que vai ser usada para checar o tempo
+        self.last = 0
+        # Pega o tempo de agora
+        self.now = pygame.time.get_ticks()
+        
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
 
@@ -56,11 +62,36 @@ class seta_left(pygame.sprite.Sprite):
         self.speedx = 3
         self.speedy = 3
 
+
     def update(self):
         # Atualizando a posição da seta
         self.rect.x += self.speedx
         if self.rect.centerx >= WIDTH/2-button_width:
-            self.rect.x = -button_width
+            self.speedx = 0
+            self.last = pygame.time.get_ticks()
+            # Se a diferença de tempo for menor que 100 milissegundos, é válido.
+            
+            if self.last-self.now < 100:
+                self.state = True
+            else:
+                self.state = False
+                self.kill()
+                print('risos')
+                
+            
+
+    # Checa se o tempo apertado é no range válido
+    def check_tempo_certo(self):
+        # Pega o tempo de agora
+        now = pygame.time.get_ticks()
+
+        # Se a diferença de tempo for menor que 100 milissegundos, é válido.
+        if now-self.last < 100:
+            self.state = True
+        else:
+            self.state = False
+            
+
 
 class seta_up(pygame.sprite.Sprite):
     def __init__(self):
