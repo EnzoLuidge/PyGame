@@ -38,12 +38,18 @@ def load_assets():
     assets['down_space'] = pygame.image.load('assets/down_space.png').convert_alpha()
     assets['down_space'] = pygame.transform.scale(assets['down_space'], (button_width, button_height))
     
+    ##sistema de placar
+    assets["score_font"] = pygame.font.Font('assets/font/PressStart2P.ttf', 28)
+    assets['score'] = 0
+
     # Sons serelepes
     pygame.mixer.music.load('assets/musica.mp3')
     pygame.mixer.music.set_volume(0.2)
     assets['boom'] = pygame.mixer.Sound('assets/boom.wav')
 
     return assets
+
+assets = load_assets()
 
 ##definindo uma classe para cada uma das setas
 class seta_left(pygame.sprite.Sprite):
@@ -72,25 +78,13 @@ class seta_left(pygame.sprite.Sprite):
             self.last = pygame.time.get_ticks()
             # Se a diferença de tempo for menor que 100 milissegundos, é válido.
             
-<<<<<<< HEAD
             if self.last-self.now < 1600:
-=======
-            if self.last-self.now < 1700:
->>>>>>> 54d6fd4e352f44cdee508f9753fdc62a2835db11
                 self.state = True
               
             else:
                 self.state = False
                 self.kill()
-<<<<<<< HEAD
-                
-=======
                 assets['boom'].play()
-                print('risos')
-                
-            
-
->>>>>>> 54d6fd4e352f44cdee508f9753fdc62a2835db11
 
 class seta_up(pygame.sprite.Sprite):
     def __init__(self):
@@ -122,6 +116,7 @@ class seta_up(pygame.sprite.Sprite):
             else:
                 self.state = False
                 self.kill()
+                assets['boom'].play()
 
 class seta_right(pygame.sprite.Sprite):
     def __init__(self):
@@ -153,7 +148,7 @@ class seta_right(pygame.sprite.Sprite):
             else:
                 self.state = False
                 self.kill()
-           
+                assets['boom'].play()
 
 class seta_down(pygame.sprite.Sprite):
     def __init__(self):
@@ -186,6 +181,7 @@ class seta_down(pygame.sprite.Sprite):
             else:
                 self.state = False
                 self.kill()
+                assets['boom'].play()
   
 
 class seta_left_space(pygame.sprite.Sprite):
@@ -222,6 +218,7 @@ class seta_right_space(pygame.sprite.Sprite):
     def __init__(self):
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
+        
 
         self.image = assets['right_space']
         self.rect = self.image.get_rect()
@@ -279,6 +276,11 @@ while game:
     window.blit(setadownspace.image,setadownspace.rect)
     window.blit(setarightspace.image, setarightspace.rect)
     
+    text_surface = assets['score_font'].render("{:08d}".format(assets['score']), True, (255, 255, 0))
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (WIDTH / 2,  10)
+    window.blit(text_surface, text_rect)
+
     ##mostrando a imagem das setas
     all_setas.draw(window)
 
