@@ -71,31 +71,20 @@ class seta_left(pygame.sprite.Sprite):
             self.last = pygame.time.get_ticks()
             # Se a diferença de tempo for menor que 100 milissegundos, é válido.
             
-            if self.last-self.now < 1500:
+            if self.last-self.now < 1600:
                 self.state = True
-                print("fala zeze")
+              
             else:
                 self.state = False
                 self.kill()
-                print('risos')
                 
-            
-
-    # Checa se o tempo apertado é no range válido
-    def check_tempo_certo(self):
-        # Pega o tempo de agora
-        now = pygame.time.get_ticks()
-
-        # Se a diferença de tempo for menor que 100 milissegundos, é válido.
-        if now-self.last < 100:
-            self.state = True
-        else:
-            self.state = False
-            
-
 
 class seta_up(pygame.sprite.Sprite):
     def __init__(self):
+        #variável que vai ser usada para checar o tempo
+        self.last = 0
+        # Pega o tempo de agora
+        self.now = pygame.time.get_ticks()
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
 
@@ -110,10 +99,23 @@ class seta_up(pygame.sprite.Sprite):
         # Atualizando a posição da seta
         self.rect.y += self.speedy
         if self.rect.centery >= HEIGHT/2-button_height:
-            self.rect.y = -button_width
+            self.speedy = 0
+            self.last = pygame.time.get_ticks()
+            # Se a diferença de tempo for menor que 100 milissegundos, é válido.
+            
+            if self.last-self.now < 1600:
+                self.state = True
+    
+            else:
+                self.state = False
+                self.kill()
 
 class seta_right(pygame.sprite.Sprite):
     def __init__(self):
+        #variável que vai ser usada para checar o tempo
+        self.last = 0
+        # Pega o tempo de agora
+        self.now = pygame.time.get_ticks()
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
 
@@ -128,10 +130,24 @@ class seta_right(pygame.sprite.Sprite):
         # Atualizando a posição da seta
         self.rect.x -= self.speedx
         if self.rect.centerx <= WIDTH/2+button_width:
-            self.rect.x = WIDTH
+            self.speedx = 0
+            self.last = pygame.time.get_ticks()
+            # Se a diferença de tempo for menor que 100 milissegundos, é válido.
+            
+            if self.last-self.now < 1600:
+                self.state = True
+      
+            else:
+                self.state = False
+                self.kill()
+           
 
 class seta_down(pygame.sprite.Sprite):
     def __init__(self):
+        #variável que vai ser usada para checar o tempo
+        self.last = 0
+        # Pega o tempo de agora
+        self.now = pygame.time.get_ticks()
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
 
@@ -143,10 +159,21 @@ class seta_down(pygame.sprite.Sprite):
         self.speedy = 3
 
     def update(self):
+        
         # Atualizando a posição da seta
         self.rect.y -= self.speedy
         if self.rect.centery <= HEIGHT/2+button_height:
-            self.rect.y = HEIGHT
+            self.speedy = 0
+            self.last = pygame.time.get_ticks()
+            # Se a diferença de tempo for menor que 100 milissegundos, é válido.
+            
+            if self.last-self.now < 1600:
+                self.state = True
+         
+            else:
+                self.state = False
+                self.kill()
+  
 
 class seta_left_space(pygame.sprite.Sprite):
     def __init__(self):
