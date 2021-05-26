@@ -46,6 +46,9 @@ def load_assets():
 ##definindo uma classe para cada uma das setas
 class seta_left(pygame.sprite.Sprite):
     def __init__(self):
+        #construtor da classe mãe (Sprite)
+        pygame.sprite.Sprite.__init__(self)
+
         self.image = assets['left']
         self.rect = self.image.get_rect()
         self.rect.x = -button_width
@@ -61,6 +64,9 @@ class seta_left(pygame.sprite.Sprite):
 
 class seta_up(pygame.sprite.Sprite):
     def __init__(self):
+        #construtor da classe mãe (Sprite)
+        pygame.sprite.Sprite.__init__(self)
+
         self.image = assets['up']
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH/2
@@ -76,6 +82,9 @@ class seta_up(pygame.sprite.Sprite):
 
 class seta_right(pygame.sprite.Sprite):
     def __init__(self):
+        #construtor da classe mãe (Sprite)
+        pygame.sprite.Sprite.__init__(self)
+
         self.image = assets['right']
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH
@@ -91,6 +100,9 @@ class seta_right(pygame.sprite.Sprite):
 
 class seta_down(pygame.sprite.Sprite):
     def __init__(self):
+        #construtor da classe mãe (Sprite)
+        pygame.sprite.Sprite.__init__(self)
+
         self.image = assets['down']
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH/2
@@ -106,6 +118,9 @@ class seta_down(pygame.sprite.Sprite):
 
 class seta_left_space(pygame.sprite.Sprite):
     def __init__(self):
+        #construtor da classe mãe (Sprite)
+        pygame.sprite.Sprite.__init__(self)
+
         self.image = assets['left_space']
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH/2-button_width
@@ -113,6 +128,9 @@ class seta_left_space(pygame.sprite.Sprite):
 
 class seta_up_space(pygame.sprite.Sprite):
     def __init__(self):
+        #construtor da classe mãe (Sprite)
+        pygame.sprite.Sprite.__init__(self)
+
         self.image = assets['up_space']
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH/2
@@ -120,6 +138,9 @@ class seta_up_space(pygame.sprite.Sprite):
 
 class seta_down_space(pygame.sprite.Sprite):
     def __init__(self):
+        #construtor da classe mãe (Sprite)
+        pygame.sprite.Sprite.__init__(self)
+
         self.image = assets['down_space']
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH/2
@@ -127,6 +148,9 @@ class seta_down_space(pygame.sprite.Sprite):
 
 class seta_right_space(pygame.sprite.Sprite):
     def __init__(self):
+        #construtor da classe mãe (Sprite)
+        pygame.sprite.Sprite.__init__(self)
+
         self.image = assets['right_space']
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH/2+button_width
@@ -170,19 +194,17 @@ while game:
 
     window.fill((0, 0, 255))
 
-    ##mostrando a imagem das setas
-    window.blit(setaleft.image, setaleft.rect)
-    window.blit(setaup.image,setaup.rect)
-    window.blit(setaright.image,setaright.rect)
-    window.blit(setadown.image,setadown.rect)
-
     ##mostrando a imagem das setas vazias
     window.blit(setaleftspace.image, setaleftspace.rect)
     window.blit(setaupspace.image,setaupspace.rect)
     window.blit(setadownspace.image,setadownspace.rect)
     window.blit(setarightspace.image, setarightspace.rect)
     
-    
+    ##mostrando a imagem das setas
+    window.blit(setaleft.image, setaleft.rect)
+    window.blit(setaup.image,setaup.rect)
+    window.blit(setaright.image,setaright.rect)
+    window.blit(setadown.image,setadown.rect)
 
     #window.blit(right_img_small, (button_x,button_y))
     pygame.display.update()
