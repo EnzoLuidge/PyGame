@@ -37,24 +37,25 @@ def load_assets():
     assets['up_space'] = pygame.transform.scale(assets['up_space'], (button_width, button_height))
     assets['down_space'] = pygame.image.load('assets/down_space.png').convert_alpha()
     assets['down_space'] = pygame.transform.scale(assets['down_space'], (button_width, button_height))
-
-    #Sons
+    
+    # Sons serelepes
     pygame.mixer.music.load('assets/musica.mp3')
     pygame.mixer.music.set_volume(0.2)
+    assets['boom'] = pygame.mixer.Sound('assets/boom.wav')
 
     return assets
 
 ##definindo uma classe para cada uma das setas
 class seta_left(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, assets):
         #variável que vai ser usada para checar o tempo
         self.last = 0
         # Pega o tempo de agora
         self.now = pygame.time.get_ticks()
-        
+
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
-
+        self.assets = assets
         self.image = assets['left']
         self.rect = self.image.get_rect()
         self.rect.x = -button_width
@@ -71,26 +72,15 @@ class seta_left(pygame.sprite.Sprite):
             self.last = pygame.time.get_ticks()
             # Se a diferença de tempo for menor que 100 milissegundos, é válido.
             
-            if self.last-self.now < 1500:
+            if self.last-self.now < 1700:
                 self.state = True
                 print("fala zeze")
             else:
                 self.state = False
                 self.kill()
+                assets['boom'].play()
                 print('risos')
                 
-            
-
-    # Checa se o tempo apertado é no range válido
-    def check_tempo_certo(self):
-        # Pega o tempo de agora
-        now = pygame.time.get_ticks()
-
-        # Se a diferença de tempo for menor que 100 milissegundos, é válido.
-        if now-self.last < 100:
-            self.state = True
-        else:
-            self.state = False
             
 
 
@@ -201,7 +191,7 @@ assets = load_assets()
 pygame.mixer.music.play(loops=-1)
 
 ##puxando as classes de seta
-setaleft = seta_left()
+setaleft = seta_left(assets)
 setadown = seta_down()
 setaright = seta_right()
 setaup = seta_up()
