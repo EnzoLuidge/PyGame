@@ -239,6 +239,13 @@ class seta_right_space(pygame.sprite.Sprite):
         self.rect.centerx = WIDTH/2+button_width
         self.rect.centery = HEIGHT/2
 
+def Tempo(tempomusica):
+    tempomusica = int(tempomusica)
+    tempo = tempomusica-1585
+    return tempo
+
+from música import * 
+
 game = True
 
 clock = pygame.time.Clock()
@@ -252,10 +259,6 @@ assets = load_assets()
 pygame.mixer.music.play(loops=-1)
 
 ##puxando as classes de seta
-setaleft = seta_left()
-setadown = seta_down()
-setaright = seta_right()
-setaup = seta_up()
 setaleftspace = seta_left_space()
 setaupspace = seta_up_space()
 setarightspace = seta_right_space()
@@ -263,29 +266,41 @@ setadownspace = seta_down_space()
 
 ##criando um grupo de setas e armazenando todas em um grupo de grupo de setas
 lefts = pygame.sprite.Group()
-lefts.add(setaleft)
-
 rights = pygame.sprite.Group()
-rights.add(setaright)
-
 ups = pygame.sprite.Group()
-ups.add(setaup)
-
 downs = pygame.sprite.Group()
-downs.add(setadown)
+
 
 all_setas = pygame.sprite.Group()
-all_setas.add(lefts)
-all_setas.add(rights)
-all_setas.add(ups)
-all_setas.add(downs)
 
 keys_down = {}
 
 while game:
     print(len(lefts))
     tempo_musica = pygame.mixer.music.get_pos()
+    for letra in dic:
+        
+        tempo = Tempo(letra)
+        if tempo_musica >= tempo and tempo_musica <= tempo+20:
+            if dic[letra] == 'left':
+                setaleft = seta_left()
+                all_setas.add(setaleft)
+                lefts.add(setaleft)
+            
+            elif dic[letra] == 'right':
+                setaright = seta_right()
+                all_setas.add(setaright)
+                rights.add(setaright)
 
+            elif dic[letra] == 'up':
+                setaup = seta_up()
+                all_setas.add(setaup)
+                ups.add(setaup)
+
+            elif dic[letra] == 'down': 
+                setadown = seta_down()
+                all_setas.add(setadown) 
+                downs.add(setadown)
     clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
