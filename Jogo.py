@@ -75,17 +75,19 @@ class seta_left(pygame.sprite.Sprite):
     def update(self):
         # Atualizando a posição da seta
         self.rect.x += self.speedx
-       
-        if self.rect.centerx >= WIDTH/2-button_width:
+
+        # chegando perto, já é apertável
+        if self.rect.centerx >= WIDTH/2-1.09*button_width:
+            self.state = True
+        
+        # no momento, a seta para
+        if self.rect.centerx >= WIDTH/2-1.02*button_width:
             
             self.speedx = 0
             self.last = pygame.time.get_ticks()
-            # Se a diferença de tempo for menor que 1600 ticks, é válido.
-            
-            if self.last-self.now < 1600:
-                self.state = True
-              
-            else:
+
+            # Se a diferença de tempo for maior que 1600 ticks, perdeu.
+            if self.last-self.now > 1600:
                 self.state = False
                 self.kill()
                 assets['boom'].play()
@@ -96,6 +98,8 @@ class seta_up(pygame.sprite.Sprite):
         self.last = 0
         # Pega o tempo de agora
         self.now = pygame.time.get_ticks()
+        self.state = 0
+
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
 
@@ -109,15 +113,15 @@ class seta_up(pygame.sprite.Sprite):
     def update(self):
         # Atualizando a posição da seta
         self.rect.y += self.speedy
-        if self.rect.centery >= HEIGHT/2-button_height:
+        if self.rect.centery >= HEIGHT/2-1.09*button_height:
+            self.state = True
+
+        if self.rect.centery >= HEIGHT/2-1.02*button_height:
             self.speedy = 0
             self.last = pygame.time.get_ticks()
             # Se a diferença de tempo for menor que 1600 ticks, é válido.
             
-            if self.last-self.now < 1600:
-                self.state = True
-    
-            else:
+            if self.last-self.now > 1600:
                 self.state = False
                 self.kill()
                 assets['boom'].play()
@@ -128,6 +132,8 @@ class seta_right(pygame.sprite.Sprite):
         self.last = 0
         # Pega o tempo de agora
         self.now = pygame.time.get_ticks()
+        self.state = 0
+
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
 
@@ -141,15 +147,16 @@ class seta_right(pygame.sprite.Sprite):
     def update(self):
         # Atualizando a posição da seta
         self.rect.x -= self.speedx
-        if self.rect.centerx <= WIDTH/2+button_width:
+
+        if self.rect.centerx <= WIDTH/2+1.09*button_width:
+            self.state = True
+
+        if self.rect.centerx <= WIDTH/2+1.02*button_width:
             self.speedx = 0
             self.last = pygame.time.get_ticks()
             # Se a diferença de tempo for menor que 1600 ticks, é válido.
             
-            if self.last-self.now < 1600:
-                self.state = True
-      
-            else:
+            if self.last-self.now > 1600:
                 self.state = False
                 self.kill()
                 assets['boom'].play()
@@ -160,6 +167,8 @@ class seta_down(pygame.sprite.Sprite):
         self.last = 0
         # Pega o tempo de agora
         self.now = pygame.time.get_ticks()
+        self.state = 0
+
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
 
@@ -174,15 +183,16 @@ class seta_down(pygame.sprite.Sprite):
         
         # Atualizando a posição da seta
         self.rect.y -= self.speedy
-        if self.rect.centery <= HEIGHT/2+button_height:
+
+        if self.rect.centery <= HEIGHT/2+1.09*button_height:
+            self.state = True
+
+        if self.rect.centery <= HEIGHT/2+1.02*button_height:
             self.speedy = 0
             self.last = pygame.time.get_ticks()
             # Se a diferença de tempo for menor que 1600 ticks, é válido.
             
-            if self.last-self.now < 1600:
-                self.state = True
-         
-            else:
+            if self.last-self.now > 1600:
                 self.state = False
                 self.kill()
                 assets['boom'].play()
@@ -251,17 +261,29 @@ setaupspace = seta_up_space()
 setarightspace = seta_right_space()
 setadownspace = seta_down_space()
 
-##criando um grupo de setas e armazenando todas as setas nele
+##criando um grupo de setas e armazenando todas em um grupo de grupo de setas
+lefts = pygame.sprite.Group()
+lefts.add(setaleft)
+
+rights = pygame.sprite.Group()
+rights.add(setaright)
+
+ups = pygame.sprite.Group()
+ups.add(setaup)
+
+downs = pygame.sprite.Group()
+downs.add(setadown)
+
 all_setas = pygame.sprite.Group()
-all_setas.add(setaleft)
-all_setas.add(setaright)
-all_setas.add(setaup)
-all_setas.add(setadown)
+all_setas.add(lefts)
+all_setas.add(rights)
+all_setas.add(ups)
+all_setas.add(downs)
 
 keys_down = {}
 
 while game:
-
+    print(len(lefts))
     tempo_musica = pygame.mixer.music.get_pos()
 
     clock.tick(FPS)
@@ -273,27 +295,52 @@ while game:
             # Dependendo da tecla, altera a velocidade.
             keys_down[event.key] = True
             if event.key == pygame.K_LEFT:
-                if setaleft.state == True:
-                    assets['score']+=100
-                    setaleft.state = 0
-                    setaleft.kill()
-                    assets['hihat'].play()
-                    setaleft = seta_left()
-                    all_setas.add(setaleft)
+                lefts_iter = iter(lefts)
+                for i in range(len(lefts)):
+                    left = next(lefts_iter)
+                    print(len(lefts))
+ 
+                    if left.state == True:
+                        assets['score']+=100
+                        left.state = 0
+                        left.kill()
+                        assets['hihat'].play()
+                        
             if event.key == pygame.K_RIGHT:
-                assets['hihat'].play()
-            if event.key == pygame.K_UP:
-                assets['hihat'].play()
-            if event.key == pygame.K_DOWN:
-                assets['hihat'].play()
-        # Verifica se soltou alguma tecla.
-        if event.type == pygame.KEYUP:
-            # Dependendo da tecla, altera a velocidade.
-            if event.key in keys_down and keys_down[event.key]:
+                
+                all_setas.add(setaleft)
                 if event.key == pygame.K_LEFT:
-                    print('soltou')
-                if event.key == pygame.K_RIGHT:
-                    print('soltou')
+                    rights_iter = iter(rights)
+                    for i in range(len(rights)):
+                        right = next(rights_iter)
+    
+                        if right.state == True:
+                            assets['score']+=100
+                            right.state = 0
+                            right.kill()
+                            assets['hihat'].play()
+            if event.key == pygame.K_UP:
+                    ups_iter = iter(ups)
+                    for i in range(len(ups)):
+                        up = next(ups_iter)
+    
+                        if up.state == True:
+                            assets['score']+=100
+                            up.state = 0
+                            up.kill()
+                            assets['hihat'].play()
+            if event.key == pygame.K_DOWN:
+                    downs_iter = iter(downs)
+                    for i in range(len(downs)):
+                        down = next(downs_iter)
+    
+                        if down.state == True:
+                            assets['score']+=100
+                            down.state = 0
+                            down.kill()
+                            assets['hihat'].play()
+        
+                    
     
     ##dando update nas classes de seta
     all_setas.update()
