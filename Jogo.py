@@ -1,6 +1,7 @@
 ##inicialização
 import pygame
 from pygame.constants import K_LEFT
+from música import * 
 
 pygame.init()
 
@@ -16,6 +17,11 @@ button_width = 64
 button_height = 64
 button_x = -button_width
 button_y = 240-button_height/2
+
+def Tempo(tempomusica):
+    tempomusica = int(tempomusica)
+    tempo = tempomusica-1585
+    return tempo
 
 def load_assets():
     assets = {}
@@ -77,7 +83,7 @@ class seta_left(pygame.sprite.Sprite):
         self.rect.x += self.speedx
 
         # chegando perto, já é apertável
-        if self.rect.centerx >= WIDTH/2-1.1*button_width:
+        if self.rect.centerx >= WIDTH/2-1.12*button_width:
             self.state = True
         
         # no momento, a seta para
@@ -113,14 +119,17 @@ class seta_up(pygame.sprite.Sprite):
     def update(self):
         # Atualizando a posição da seta
         self.rect.y += self.speedy
-        if self.rect.centery >= HEIGHT/2-1.1*button_height:
+
+        # chegando perto, já é apertável
+        if self.rect.centery >= HEIGHT/2-1.12*button_height:
             self.state = True
 
+        # no momento, a seta para
         if self.rect.centery >= HEIGHT/2-1.02*button_height:
             self.speedy = 0
             self.last = pygame.time.get_ticks()
-            # Se a diferença de tempo for menor que 1600 ticks, é válido.
-            
+
+            # Se a diferença de tempo for maior que 1600 ticks, perdeu.
             if self.last-self.now > 1600:
                 self.state = False
                 self.kill()
@@ -148,14 +157,16 @@ class seta_right(pygame.sprite.Sprite):
         # Atualizando a posição da seta
         self.rect.x -= self.speedx
 
-        if self.rect.centerx <= WIDTH/2+1.1*button_width:
+        # chegando perto, já é apertável
+        if self.rect.centerx <= WIDTH/2+1.12*button_width:
             self.state = True
 
+        # no momento, a seta para
         if self.rect.centerx <= WIDTH/2+1.02*button_width:
             self.speedx = 0
             self.last = pygame.time.get_ticks()
-            # Se a diferença de tempo for menor que 1600 ticks, é válido.
-            
+
+            # Se a diferença de tempo for maior que 1600 ticks, perdeu.
             if self.last-self.now > 1600:
                 self.state = False
                 self.kill()
@@ -184,14 +195,16 @@ class seta_down(pygame.sprite.Sprite):
         # Atualizando a posição da seta
         self.rect.y -= self.speedy
 
-        if self.rect.centery <= HEIGHT/2+1.1*button_height:
+        # chegando perto, já é apertável
+        if self.rect.centery <= HEIGHT/2+1.12*button_height:
             self.state = True
 
+        # no momento, a seta para
         if self.rect.centery <= HEIGHT/2+1.02*button_height:
             self.speedy = 0
             self.last = pygame.time.get_ticks()
-            # Se a diferença de tempo for menor que 1600 ticks, é válido.
-            
+
+            # Se a diferença de tempo for maior que 1600 ticks, perdeu.
             if self.last-self.now > 1600:
                 self.state = False
                 self.kill()
@@ -239,12 +252,9 @@ class seta_right_space(pygame.sprite.Sprite):
         self.rect.centerx = WIDTH/2+button_width
         self.rect.centery = HEIGHT/2
 
-def Tempo(tempomusica):
-    tempomusica = int(tempomusica)
-    tempo = tempomusica-1585
-    return tempo
 
-from música import * 
+
+
 
 game = True
 
@@ -276,11 +286,15 @@ all_setas = pygame.sprite.Group()
 keys_down = {}
 
 while game:
+
+    # Pega o tempo da música
     tempo_musica = pygame.mixer.music.get_pos()
+
+    # Para cada nota no dicionário de notas
     for letra in dic:
-        
         tempo = Tempo(letra)
-        if tempo_musica >= tempo and tempo_musica <= tempo+20:
+        # Se chegar a hora, faz a seta
+        if tempo_musica >= tempo:
             if dic[letra] == 'left':
                 setaleft = seta_left()
                 all_setas.add(setaleft)
@@ -300,6 +314,9 @@ while game:
                 setadown = seta_down()
                 all_setas.add(setadown) 
                 downs.add(setadown)
+
+            # Previne de criar notas repetidas
+            dic[letra] = 'já foi'
     clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -308,10 +325,11 @@ while game:
         if event.type == pygame.KEYDOWN:
             keys_down[event.key] = True
             if event.key == pygame.K_LEFT:
+
+                #iteração (gambiarra do py game para verificar cada seta)
                 lefts_iter = iter(lefts)
                 for i in range(len(lefts)):
                     left = next(lefts_iter)
-                    print(len(lefts))
  
                     if left.state == True:
                         assets['score']+=100
@@ -320,6 +338,8 @@ while game:
                         assets['hihat'].play()
                         
             if event.key == pygame.K_RIGHT:
+
+                #iteração (gambiarra do py game para verificar cada seta)
                 rights_iter = iter(rights)
                 for i in range(len(rights)):
                     right = next(rights_iter)
@@ -330,25 +350,29 @@ while game:
                         right.kill()
                         assets['hihat'].play()
             if event.key == pygame.K_UP:
-                    ups_iter = iter(ups)
-                    for i in range(len(ups)):
-                        up = next(ups_iter)
-    
-                        if up.state == True:
-                            assets['score']+=100
-                            up.state = 0
-                            up.kill()
-                            assets['hihat'].play()
+
+                #iteração (gambiarra do py game para verificar cada seta)
+                ups_iter = iter(ups)
+                for i in range(len(ups)):
+                    up = next(ups_iter)
+
+                    if up.state == True:
+                        assets['score']+=100
+                        up.state = 0
+                        up.kill()
+                        assets['hihat'].play()
             if event.key == pygame.K_DOWN:
-                    downs_iter = iter(downs)
-                    for i in range(len(downs)):
-                        down = next(downs_iter)
-    
-                        if down.state == True:
-                            assets['score']+=100
-                            down.state = 0
-                            down.kill()
-                            assets['hihat'].play()
+
+                #iteração (gambiarra do py game para verificar cada seta)
+                downs_iter = iter(downs)
+                for i in range(len(downs)):
+                    down = next(downs_iter)
+
+                    if down.state == True:
+                        assets['score']+=100
+                        down.state = 0
+                        down.kill()
+                        assets['hihat'].play()
         
                     
     
