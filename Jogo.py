@@ -77,7 +77,7 @@ class seta_left(pygame.sprite.Sprite):
         self.rect.x += self.speedx
 
         # chegando perto, já é apertável
-        if self.rect.centerx >= WIDTH/2-1.09*button_width:
+        if self.rect.centerx >= WIDTH/2-1.1*button_width:
             self.state = True
         
         # no momento, a seta para
@@ -113,7 +113,7 @@ class seta_up(pygame.sprite.Sprite):
     def update(self):
         # Atualizando a posição da seta
         self.rect.y += self.speedy
-        if self.rect.centery >= HEIGHT/2-1.09*button_height:
+        if self.rect.centery >= HEIGHT/2-1.1*button_height:
             self.state = True
 
         if self.rect.centery >= HEIGHT/2-1.02*button_height:
@@ -148,7 +148,7 @@ class seta_right(pygame.sprite.Sprite):
         # Atualizando a posição da seta
         self.rect.x -= self.speedx
 
-        if self.rect.centerx <= WIDTH/2+1.09*button_width:
+        if self.rect.centerx <= WIDTH/2+1.1*button_width:
             self.state = True
 
         if self.rect.centerx <= WIDTH/2+1.02*button_width:
@@ -184,7 +184,7 @@ class seta_down(pygame.sprite.Sprite):
         # Atualizando a posição da seta
         self.rect.y -= self.speedy
 
-        if self.rect.centery <= HEIGHT/2+1.09*button_height:
+        if self.rect.centery <= HEIGHT/2+1.1*button_height:
             self.state = True
 
         if self.rect.centery <= HEIGHT/2+1.02*button_height:
@@ -276,7 +276,6 @@ all_setas = pygame.sprite.Group()
 keys_down = {}
 
 while game:
-    print(len(lefts))
     tempo_musica = pygame.mixer.music.get_pos()
     for letra in dic:
         
@@ -307,7 +306,6 @@ while game:
             game = False
 
         if event.type == pygame.KEYDOWN:
-            # Dependendo da tecla, altera a velocidade.
             keys_down[event.key] = True
             if event.key == pygame.K_LEFT:
                 lefts_iter = iter(lefts)
@@ -322,18 +320,15 @@ while game:
                         assets['hihat'].play()
                         
             if event.key == pygame.K_RIGHT:
-                
-                all_setas.add(setaleft)
-                if event.key == pygame.K_LEFT:
-                    rights_iter = iter(rights)
-                    for i in range(len(rights)):
-                        right = next(rights_iter)
-    
-                        if right.state == True:
-                            assets['score']+=100
-                            right.state = 0
-                            right.kill()
-                            assets['hihat'].play()
+                rights_iter = iter(rights)
+                for i in range(len(rights)):
+                    right = next(rights_iter)
+
+                    if right.state == True:
+                        assets['score']+=100
+                        right.state = 0
+                        right.kill()
+                        assets['hihat'].play()
             if event.key == pygame.K_UP:
                     ups_iter = iter(ups)
                     for i in range(len(ups)):
