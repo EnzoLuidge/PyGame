@@ -18,6 +18,7 @@ button_height = 64
 button_x = -button_width
 button_y = 240-button_height/2
 
+# Função que recebe o tempo da música que o a seta tem que ser apertada e devolve o tempo que a seta tem que ser criada
 def Tempo(tempomusica):
     tempomusica = int(tempomusica)
     tempo = tempomusica-1585
@@ -43,6 +44,9 @@ def load_assets():
     assets['up_space'] = pygame.transform.scale(assets['up_space'], (button_width, button_height))
     assets['down_space'] = pygame.image.load('assets/img/down_space.png').convert_alpha()
     assets['down_space'] = pygame.transform.scale(assets['down_space'], (button_width, button_height))
+    assets['icy_night'] = pygame.image.load('assets/img/icy_night.png').convert_alpha()
+    assets['icy_night'] = pygame.transform.scale(assets['icy_night'], (WIDTH, HEIGHT))
+    
     
     # sistema de placar
     assets["score_font"] = pygame.font.Font('assets/font/PressStart2P.ttf', 28)
@@ -789,7 +793,7 @@ while game:
                         assets['button'].play()
 
             if event.key == pygame.K_SPACE:
-                pygame.mixer.music.play(loops=-1)
+                pygame.mixer.music.play()
                 dic = dict()
                 assets['score']=0
         
@@ -799,6 +803,7 @@ while game:
     all_sprites.update()
 
     window.fill((0, 0, 255))
+    window.blit(assets['icy_night'], (0, 0))
 
     ##mostrando a imagem das setas vazias
     window.blit(setaleftspace.image, setaleftspace.rect)
