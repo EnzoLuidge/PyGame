@@ -79,12 +79,63 @@ def dict():
     dic[35000] = 'left'
     dic[35400] = 'up'
     dic[35800] = 'right'
-    dic[36200] = 'down'
-
-    dic[36500] = 'up'
-    dic[36790] = 'left'
     
+
+    dic[36140] = 'up'
+    dic[36826] = 'left'
+    dic[37363] = 'left'
+    dic[37891] = 'right'
+    dic[38800] = 'down'
+    dic[39383] = 'up'
+    dic[39894] = 'up'
+
+    dic[40893] = 'down'
+    dic[41363] = 'left'
+    dic[41891] = 'right'
+    dic[42852] = 'up'
+    dic[43355] = 'down'
+    dic[43879] = 'right'
+    dic[44151] = 'up'
+    dic[44470] = 'left'
+    dic[44653] = 'down'
+    dic[44844] = 'right'
+    dic[45450] = 'up'
+
+    dic[46424] = 'left'
+    dic[46890] = 'left'
+    dic[47373] = 'left'
+    dic[48071] = 'down'
+    dic[48350] = 'up'
+    dic[48695] = 'right'
+    dic[48874] = 'right'
+    dic[49348] = 'down'
+
+    dic[50396] = 'up'
+    dic[50858] = 'up'
+    dic[51365] = 'up'
+    dic[52126] = 'right'
+    dic[52351] = 'down'
+    dic[52550] = 'left'
+    dic[52900] = 'up'
+    dic[53370] = 'right'
+    dic[54376] = 'down'
+    dic[54879] = 'down'
+    dic[55391] = 'down'
+    dic[56114] = 'up'
+    dic[56347] = 'left'
+    dic[56584] = 'down'
+    dic[56896] = 'right'
+    dic[57357] = 'up'
+    dic[58373] = 'right'
+    dic[58888] = 'right'
+    dic[59387] = 'down'
+
+    dic[60186] = 'left'
+    dic[60419] = 'right'
+    dic[60635] = 'up'
+    dic[60901] = 'down'
+    dic[61375] = 'down'
 
     return dic
 
-dic = dict()
+dic = dict() 
