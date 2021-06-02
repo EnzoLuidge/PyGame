@@ -135,6 +135,23 @@ def dict():
     dic[60635] = 'up'
     dic[60901] = 'down'
     dic[61375] = 'down'
+    dic[62386] = 'left'
+    dic[62877] = 'right'
+    dic[63355] = 'up'
+    dic[64150] = 'down'
+    dic[64374] = 'left'
+    dic[64602] = 'up'
+    dic[64848] = 'right'
+    dic[65347] = 'down'
+
+    dic[66399] = 'left'
+    dic[66873] = 'right'
+    dic[67372] = 'up'
+    
+
+
+
+
 
     return dic
 
