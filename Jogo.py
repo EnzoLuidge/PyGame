@@ -81,6 +81,33 @@ def load_assets():
         img = pygame.transform.scale(img, (128, 128))
         left_anim.append(img)
     assets["left_anim"] = left_anim
+    
+    up_anim = [] # animação do penguin para cima
+    for i in range(5):
+        # Os arquivos de animação são numerados de 00 a 04
+        filename = 'assets/anim/up0{}.png'.format(i)
+        img = pygame.image.load(filename).convert_alpha()
+        img = pygame.transform.scale(img, (128, 128))
+        up_anim.append(img)
+    assets["up_anim"] = up_anim
+
+    down_anim = [] # animação do penguin para baixo
+    for i in range(5):
+        # Os arquivos de animação são numerados de 00 a 04
+        filename = 'assets/anim/down0{}.png'.format(i)
+        img = pygame.image.load(filename).convert_alpha()
+        img = pygame.transform.scale(img, (128, 128))
+        down_anim.append(img)
+    assets["down_anim"] = down_anim
+
+    miss_anim = [] # animação do penguin para um erro
+    for i in range(5):
+        # Os arquivos de animação são numerados de 00 a 04
+        filename = 'assets/anim/miss0{}.png'.format(i)
+        img = pygame.image.load(filename).convert_alpha()
+        img = pygame.transform.scale(img, (128, 128))
+        miss_anim.append(img)
+    assets["miss_anim"] = miss_anim
 
     return assets
 
@@ -125,6 +152,7 @@ class seta_left(pygame.sprite.Sprite):
                 self.state = False
                 self.kill()
                 assets['boom'].play()
+                animation.frame = -2
 
 class seta_up(pygame.sprite.Sprite):
     def __init__(self):
@@ -162,6 +190,7 @@ class seta_up(pygame.sprite.Sprite):
                 self.state = False
                 self.kill()
                 assets['boom'].play()
+                animation.frame = -2
 
 class seta_right(pygame.sprite.Sprite):
     def __init__(self):
@@ -199,6 +228,7 @@ class seta_right(pygame.sprite.Sprite):
                 self.state = False
                 self.kill()
                 assets['boom'].play()
+                animation.frame = -2
 
 class seta_down(pygame.sprite.Sprite):
     def __init__(self):
@@ -237,6 +267,8 @@ class seta_down(pygame.sprite.Sprite):
                 self.state = False
                 self.kill()
                 assets['boom'].play()
+                assets['score'] -= 100
+                animation.frame = -2
   
 # Classe dos espaços de setas
 class seta_left_space(pygame.sprite.Sprite):
@@ -303,7 +335,7 @@ class Idle(pygame.sprite.Sprite):
         # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
         # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
         # próxima imagem da animação será mostrada
-        self.frame_ticks = 500
+        self.frame_ticks = 450
 
     def update(self):
         # Verifica o tick atual.
@@ -429,6 +461,159 @@ class Left(pygame.sprite.Sprite):
                 self.rect = self.image.get_rect()
                 self.rect.center = center
 
+# Classe da animação do penguin para cima
+class Up(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def __init__(self, assets):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Armazena a animação de idle
+        self.up_anim = assets['up_anim']
+
+        # Inicia o processo de animação colocando a primeira imagem na tela.
+        self.frame = 0  # Armazena o índice atual na animação
+        self.image = self.up_anim[self.frame]  # Pega a primeira imagem
+        self.rect = self.image.get_rect()
+        self.rect.centery = HEIGHT/2  # Posiciona o centro da imagem
+        self.rect.centerx = WIDTH/2
+
+        # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
+        self.last_update = pygame.time.get_ticks()
+
+        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
+        # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
+        # próxima imagem da animação será mostrada
+        self.frame_ticks = 80
+
+    def update(self):
+        # Verifica o tick atual.
+        now = pygame.time.get_ticks()
+        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        elapsed_ticks = now - self.last_update
+
+        # Se já está na hora de mudar de imagem...
+        if elapsed_ticks > self.frame_ticks:
+            # Marca o tick da nova imagem.
+            self.last_update = now
+
+            # Avança um quadro.
+            self.frame += 1
+
+            # Verifica se já chegou no final da animação.
+            if self.frame == len(self.up_anim):
+                # Se sim, deixa o frame como -1 para poder chamar a animação idle em seguida
+                self.frame = -1
+            
+            else:
+                # Se ainda não chegou ao fim da animação, troca de imagem.
+                center = self.rect.center
+                self.image = self.up_anim[self.frame]
+                self.rect = self.image.get_rect()
+                self.rect.center = center
+
+# Classe da animação do penguin para baixo
+class Down(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def __init__(self, assets):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Armazena a animação de idle
+        self.down_anim = assets['down_anim']
+
+        # Inicia o processo de animação colocando a primeira imagem na tela.
+        self.frame = 0  # Armazena o índice atual na animação
+        self.image = self.down_anim[self.frame]  # Pega a primeira imagem
+        self.rect = self.image.get_rect()
+        self.rect.centery = HEIGHT/2  # Posiciona o centro da imagem
+        self.rect.centerx = WIDTH/2
+
+        # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
+        self.last_update = pygame.time.get_ticks()
+
+        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
+        # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
+        # próxima imagem da animação será mostrada
+        self.frame_ticks = 80
+
+    def update(self):
+        # Verifica o tick atual.
+        now = pygame.time.get_ticks()
+        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        elapsed_ticks = now - self.last_update
+
+        # Se já está na hora de mudar de imagem...
+        if elapsed_ticks > self.frame_ticks:
+            # Marca o tick da nova imagem.
+            self.last_update = now
+
+            # Avança um quadro.
+            self.frame += 1
+
+            # Verifica se já chegou no final da animação.
+            if self.frame == len(self.down_anim):
+                # Se sim, deixa o frame como -1 para poder chamar a animação idle em seguida
+                self.frame = -1
+            
+            else:
+                # Se ainda não chegou ao fim da animação, troca de imagem.
+                center = self.rect.center
+                self.image = self.down_anim[self.frame]
+                self.rect = self.image.get_rect()
+                self.rect.center = center
+
+# Classe da animação do penguin para um erro
+class Miss(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def __init__(self, assets):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Armazena a animação de idle
+        self.miss_anim = assets['miss_anim']
+
+        # Inicia o processo de animação colocando a primeira imagem na tela.
+        self.frame = 0  # Armazena o índice atual na animação
+        self.image = self.miss_anim[self.frame]  # Pega a primeira imagem
+        self.rect = self.image.get_rect()
+        self.rect.centery = HEIGHT/2  # Posiciona o centro da imagem
+        self.rect.centerx = WIDTH/2
+
+        # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
+        self.last_update = pygame.time.get_ticks()
+
+        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
+        # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
+        # próxima imagem da animação será mostrada
+        self.frame_ticks = 80
+
+    def update(self):
+        # Verifica o tick atual.
+        now = pygame.time.get_ticks()
+        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        elapsed_ticks = now - self.last_update
+
+        # Se já está na hora de mudar de imagem...
+        if elapsed_ticks > self.frame_ticks:
+            # Marca o tick da nova imagem.
+            self.last_update = now
+
+            # Avança um quadro.
+            self.frame += 1
+
+            # Verifica se já chegou no final da animação.
+            if self.frame == len(self.miss_anim):
+                # Se sim, deixa o frame como -1 para poder chamar a animação idle em seguida
+                self.frame = -1
+            
+            else:
+                # Se ainda não chegou ao fim da animação, troca de imagem.
+                center = self.rect.center
+                self.image = self.miss_anim[self.frame]
+                self.rect = self.image.get_rect()
+                self.rect.center = center
+
 ##puxando as classes de espaços das setas
 setaleftspace = seta_left_space()
 setaupspace = seta_up_space()
@@ -457,9 +642,14 @@ clock = pygame.time.Clock()
 FPS = 60
 
 while game:
+    # Se tiver um erro, toca a animação de erro
+    if animation.frame == -2:
+        animation.kill()
+        animation = Miss(assets)
+        all_sprites.add(animation)
 
     # Se a animação acabar, volta para a de idle
-    if animation.frame == -1:
+    elif animation.frame == -1:
         animation.kill()
         animation = Idle(assets)
         all_sprites.add(animation)
@@ -532,6 +722,7 @@ while game:
                         animation.kill()
                         animation = Right(assets)
                         all_sprites.add(animation)
+
             if event.key == pygame.K_UP:
 
                 #iteração (gambiarra do pygame para verificar cada seta)
@@ -544,6 +735,10 @@ while game:
                         up.state = 0
                         up.kill()
                         assets['hihat'].play()
+                        animation.kill()
+                        animation = Up(assets)
+                        all_sprites.add(animation)
+
             if event.key == pygame.K_DOWN:
 
                 #iteração (gambiarra do pygame para verificar cada seta)
@@ -556,6 +751,9 @@ while game:
                         down.state = 0
                         down.kill()
                         assets['hihat'].play()
+                        animation.kill()
+                        animation = Down(assets)
+                        all_sprites.add(animation)
 
             if event.key == pygame.K_SPACE:
                 pygame.mixer.music.play(loops=-1)
