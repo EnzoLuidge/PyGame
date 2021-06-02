@@ -53,6 +53,7 @@ def load_assets():
     pygame.mixer.music.set_volume(0.2)
     assets['boom'] = pygame.mixer.Sound('assets/snd/boom.wav')
     assets['hihat'] = pygame.mixer.Sound('assets/snd/hihat.wav')
+    assets['button'] = pygame.mixer.Sound('assets/snd/button.wav')
 
     # Animações
     idle_anim = [] # animação de repouso
@@ -120,7 +121,7 @@ class seta_left(pygame.sprite.Sprite):
         self.last = 0
         # Pega o tempo de agora
         self.now = pygame.time.get_ticks()
-        self.state = 0
+        self.state = False
 
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
@@ -152,6 +153,7 @@ class seta_left(pygame.sprite.Sprite):
                 self.state = False
                 self.kill()
                 assets['boom'].play()
+                assets['score'] -= 100
                 animation.frame = -2
 
 class seta_up(pygame.sprite.Sprite):
@@ -160,7 +162,7 @@ class seta_up(pygame.sprite.Sprite):
         self.last = 0
         # Pega o tempo de agora
         self.now = pygame.time.get_ticks()
-        self.state = 0
+        self.state = False
 
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
@@ -190,6 +192,7 @@ class seta_up(pygame.sprite.Sprite):
                 self.state = False
                 self.kill()
                 assets['boom'].play()
+                assets['score'] -= 100
                 animation.frame = -2
 
 class seta_right(pygame.sprite.Sprite):
@@ -198,7 +201,7 @@ class seta_right(pygame.sprite.Sprite):
         self.last = 0
         # Pega o tempo de agora
         self.now = pygame.time.get_ticks()
-        self.state = 0
+        self.state = False
 
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
@@ -228,6 +231,7 @@ class seta_right(pygame.sprite.Sprite):
                 self.state = False
                 self.kill()
                 assets['boom'].play()
+                assets['score'] -= 100
                 animation.frame = -2
 
 class seta_down(pygame.sprite.Sprite):
@@ -236,7 +240,7 @@ class seta_down(pygame.sprite.Sprite):
         self.last = 0
         # Pega o tempo de agora
         self.now = pygame.time.get_ticks()
-        self.state = 0
+        self.state = False
 
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
@@ -695,65 +699,94 @@ while game:
 
                 #iteração (gambiarra do pygame para verificar cada seta)
                 lefts_iter = iter(lefts)
+                seta_valida = False #variável para checar se alguma seta é válida (no caso de múltiplas setas do mesmo tipo)
                 for i in range(len(lefts)):
                     left = next(lefts_iter)
  
                     if left.state == True:
                         assets['score']+=100
-                        left.state = 0
+                        left.state = False
                         left.kill()
                         assets['hihat'].play()
                         animation.kill()
                         animation = Left(assets)
                         all_sprites.add(animation)
+                        seta_valida = True
+                    
+                    #código que penaliza ficar spammando o botão
+                    elif seta_valida == False:
+                        assets['score']-=10
+                        assets['button'].play()
+
                         
             if event.key == pygame.K_RIGHT:
 
                 #iteração (gambiarra do pygame para verificar cada seta)
                 rights_iter = iter(rights)
+                seta_valida = False #variável para checar se alguma seta é válida (no caso de múltiplas setas do mesmo tipo)
                 for i in range(len(rights)):
                     right = next(rights_iter)
 
                     if right.state == True:
                         assets['score']+=100
-                        right.state = 0
+                        right.state = False
                         right.kill()
                         assets['hihat'].play()
                         animation.kill()
                         animation = Right(assets)
                         all_sprites.add(animation)
+                        seta_valida = True
+                    
+                    #código que penaliza ficar spammando o botão
+                    elif seta_valida == False:
+                        assets['score']-=10
+                        assets['button'].play()
 
             if event.key == pygame.K_UP:
 
                 #iteração (gambiarra do pygame para verificar cada seta)
                 ups_iter = iter(ups)
+                seta_valida = False #variável para checar se alguma seta é válida (no caso de múltiplas setas do mesmo tipo)
                 for i in range(len(ups)):
                     up = next(ups_iter)
 
                     if up.state == True:
                         assets['score']+=100
-                        up.state = 0
+                        up.state = False
                         up.kill()
                         assets['hihat'].play()
                         animation.kill()
                         animation = Up(assets)
                         all_sprites.add(animation)
+                        seta_valida = True
+                    
+                    #código que penaliza ficar spammando o botão
+                    elif seta_valida == False:
+                        assets['score']-=10
+                        assets['button'].play()
 
             if event.key == pygame.K_DOWN:
 
                 #iteração (gambiarra do pygame para verificar cada seta)
                 downs_iter = iter(downs)
+                seta_valida = False #variável para checar se alguma seta é válida (no caso de múltiplas setas do mesmo tipo)
                 for i in range(len(downs)):
                     down = next(downs_iter)
 
                     if down.state == True:
                         assets['score']+=100
-                        down.state = 0
+                        down.state = False
                         down.kill()
                         assets['hihat'].play()
                         animation.kill()
                         animation = Down(assets)
                         all_sprites.add(animation)
+                        seta_valida = True
+                    
+                    #código que penaliza ficar spammando o botão
+                    elif seta_valida == False:
+                        assets['score']-=10
+                        assets['button'].play()
 
             if event.key == pygame.K_SPACE:
                 pygame.mixer.music.play(loops=-1)
@@ -773,6 +806,10 @@ while game:
     window.blit(setadownspace.image,setadownspace.rect)
     window.blit(setarightspace.image, setarightspace.rect)
     
+    # Previne o score de ser negativo
+    if assets['score']<0:
+        assets['score']=0
+
     text_surface = assets['score_font'].render("{:08d}".format(assets['score']), True, (255, 255, 0))
     text_rect = text_surface.get_rect()
     text_rect.midtop = (WIDTH / 2,  10)
