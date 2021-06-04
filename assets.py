@@ -24,6 +24,8 @@ def load_assets():
     assets['down_space'] = pygame.transform.scale(assets['down_space'], (button_width, button_height))
     assets['icy_night'] = pygame.image.load(os.path.join(IMG_DIR, 'icy_night.png')).convert_alpha()
     assets['icy_night'] = pygame.transform.scale(assets['icy_night'], (WIDTH, HEIGHT))
+    assets['transition'] = pygame.image.load(os.path.join(IMG_DIR, 'transition.png')).convert_alpha()
+    assets['transition'] = pygame.transform.scale(assets['transition'], (600, 1700))
     
     
     # sistema de placar
@@ -46,6 +48,15 @@ def load_assets():
         img = pygame.transform.scale(img, (128, 128))
         idle_anim.append(img)
     assets["idle_anim"] = idle_anim
+
+    big_idle_anim = [] # animação de repouso
+    for i in range(2):
+        # Os arquivos de animação são numerados de 00 a 01
+        filename = os.path.join(ANIM_DIR, 'idle0{}.png'.format(i))
+        img = pygame.image.load(filename).convert_alpha()
+        img = pygame.transform.scale(img, (400, 400))
+        big_idle_anim.append(img)
+    assets["big_idle_anim"] = big_idle_anim
 
     right_anim = [] # animação do penguin para direita
     for i in range(5):

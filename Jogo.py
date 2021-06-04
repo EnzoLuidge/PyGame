@@ -1,9 +1,9 @@
 ##inicialização
 import pygame
 from música import dict, dic
-from config import WIDTH, HEIGHT, FPS
+from config import WIDTH, HEIGHT, FPS, QUIT, INIT, PLAYING, SCORING
 from assets import load_assets
-from sprites import seta_left, seta_down, seta_up, seta_right, seta_down_space, seta_left_space, seta_right_space, seta_up_space, Idle, Miss, Up, Down, Left, Right
+from sprites import seta_left, seta_down, seta_up, seta_right, seta_down_space, seta_left_space, seta_right_space, seta_up_space, Idle, Big_Idle, Miss, Up, Down, Left, Right, Transition
 
 # Começa 
 pygame.init()
@@ -35,193 +35,233 @@ all_sprites = pygame.sprite.Group()
 animations = pygame.sprite.Group()
 
 keys_down = {}
-animation = Idle(assets)
+animation = Big_Idle(assets)
 animations.add(animation)
-
-
+transition = Transition(assets)
+animations.add(transition)
 
 
 # Loop principal---------------------------------------------------------------------------------------
-game = True
+game = INIT
 clock = pygame.time.Clock()
 
-while game:
-    # Se tiver um erro, toca a animação de erro
-    if animation.frame == -2:
-        animation.kill()
-        animation = Miss(assets)
-        animations.add(animation)
+while game != QUIT:
+
+    if game == INIT:
+    
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game = QUIT
+
+            if event.type == pygame.KEYDOWN:
+                keys_down[event.key] = True
+
+                if event.key == pygame.K_SPACE:
+                    if transition.done == -1:
+                        transition.done = 0
+                        assets['boom'].play()
+                    
+        if transition.done == 1:
+            game = PLAYING
+            animation.kill()
+        
+        clock.tick(FPS)
+        ##dando update nas classes
+        all_sprites.update(assets, animation)
+        animations.update()
+
+        window.fill((0, 0, 255))
+
+        ##mostrando a imagem das setas
+        all_sprites.draw(window)
+        animations.draw(window)
+
+    elif game == PLAYING:
+        
+        if transition.done == 2:
+            transition.done = -1
+            pygame.mixer.music.play()
+            dic = dict()
+            assets['score']=0
+            animation = Idle(assets)
+            animations.add(animation)
         
 
-    # Se a animação acabar, volta para a de idle
-    elif animation.frame == -1:
-        animation.kill()
-        animation = Idle(assets)
-        animations.add(animation)
-        
+        # Se tiver um erro, toca a animação de erro
+        if animation.frame == -2:
+            animation.kill()
+            animation = Miss(assets)
+            animations.add(animation)
 
-    # Pega o tempo da música
-    tempo_musica = pygame.mixer.music.get_pos()
-
-    # Para cada nota no dicionário de notas
-    for letra in dic:
-        tempo = Tempo(letra)
-        # Se chegar a hora, faz a seta
-        if tempo_musica >= tempo:
-            if dic[letra] == 'left':
-                setaleft = seta_left(assets)
-                all_sprites.add(setaleft)
-                lefts.add(setaleft)
+        # Se a animação acabar, volta para a de idle
+        elif animation.frame == -1:
+            animation.kill()
+            animation = Idle(assets)
+            animations.add(animation)
             
-            elif dic[letra] == 'right':
-                setaright = seta_right(assets)
-                all_sprites.add(setaright)
-                rights.add(setaright)
 
-            elif dic[letra] == 'up':
-                setaup = seta_up(assets)
-                all_sprites.add(setaup)
-                ups.add(setaup)
+        # Pega o tempo da música
+        tempo_musica = pygame.mixer.music.get_pos()
 
-            elif dic[letra] == 'down': 
-                setadown = seta_down(assets)
-                all_sprites.add(setadown) 
-                downs.add(setadown)
+        # Para cada nota no dicionário de notas
+        for letra in dic:
+            tempo = Tempo(letra)
+            # Se chegar a hora, faz a seta
+            if tempo_musica >= tempo:
+                if dic[letra] == 'left':
+                    setaleft = seta_left(assets)
+                    all_sprites.add(setaleft)
+                    lefts.add(setaleft)
+                
+                elif dic[letra] == 'right':
+                    setaright = seta_right(assets)
+                    all_sprites.add(setaright)
+                    rights.add(setaright)
 
-            # Previne de criar notas repetidas
-            dic[letra] = 'já foi'
-    clock.tick(FPS)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            game = False
+                elif dic[letra] == 'up':
+                    setaup = seta_up(assets)
+                    all_sprites.add(setaup)
+                    ups.add(setaup)
 
-        if event.type == pygame.KEYDOWN:
-            keys_down[event.key] = True
-            if event.key == pygame.K_LEFT:
+                elif dic[letra] == 'down': 
+                    setadown = seta_down(assets)
+                    all_sprites.add(setadown) 
+                    downs.add(setadown)
 
-                #iteração (gambiarra do pygame para verificar cada seta)
-                lefts_iter = iter(lefts)
-                seta_valida = False #variável para checar se alguma seta é válida (no caso de múltiplas setas do mesmo tipo)
-                for i in range(len(lefts)):
-                    left = next(lefts_iter)
- 
-                    if left.state == True:
-                        assets['score']+=100
-                        left.state = False
-                        left.kill()
-                        assets['hihat'].play()
-                        animation.kill()
-                        animation = Left(assets)
-                        animations.add(animation)
-                        seta_valida = True
-                    
-                    #código que penaliza ficar spammando o botão
-                    elif seta_valida == False:
-                        assets['score']-=10
-                        assets['button'].play()
+                # Previne de criar notas repetidas
+                dic[letra] = 'já foi'
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game = QUIT
 
+            if event.type == pygame.KEYDOWN:
+                keys_down[event.key] = True
+                if event.key == pygame.K_LEFT:
+
+                    #iteração (gambiarra do pygame para verificar cada seta)
+                    lefts_iter = iter(lefts)
+                    seta_valida = False #variável para checar se alguma seta é válida (no caso de múltiplas setas do mesmo tipo)
+                    for i in range(len(lefts)):
+                        left = next(lefts_iter)
+    
+                        if left.state == True:
+                            assets['score']+=100
+                            left.state = False
+                            left.kill()
+                            assets['hihat'].play()
+                            animation.kill()
+                            animation = Left(assets)
+                            animations.add(animation)
+                            seta_valida = True
                         
-            if event.key == pygame.K_RIGHT:
+                        #código que penaliza ficar spammando o botão
+                        elif seta_valida == False:
+                            assets['score']-=10
+                            assets['button'].play()
 
-                #iteração (gambiarra do pygame para verificar cada seta)
-                rights_iter = iter(rights)
-                seta_valida = False #variável para checar se alguma seta é válida (no caso de múltiplas setas do mesmo tipo)
-                for i in range(len(rights)):
-                    right = next(rights_iter)
+                            
+                if event.key == pygame.K_RIGHT:
 
-                    if right.state == True:
-                        assets['score']+=100
-                        right.state = False
-                        right.kill()
-                        assets['hihat'].play()
-                        animation.kill()
-                        animation = Right(assets)
-                        animations.add(animation)
-                        seta_valida = True
-                    
-                    #código que penaliza ficar spammando o botão
-                    elif seta_valida == False:
-                        assets['score']-=10
-                        assets['button'].play()
+                    #iteração (gambiarra do pygame para verificar cada seta)
+                    rights_iter = iter(rights)
+                    seta_valida = False #variável para checar se alguma seta é válida (no caso de múltiplas setas do mesmo tipo)
+                    for i in range(len(rights)):
+                        right = next(rights_iter)
 
-            if event.key == pygame.K_UP:
+                        if right.state == True:
+                            assets['score']+=100
+                            right.state = False
+                            right.kill()
+                            assets['hihat'].play()
+                            animation.kill()
+                            animation = Right(assets)
+                            animations.add(animation)
+                            seta_valida = True
+                        
+                        #código que penaliza ficar spammando o botão
+                        elif seta_valida == False:
+                            assets['score']-=10
+                            assets['button'].play()
 
-                #iteração (gambiarra do pygame para verificar cada seta)
-                ups_iter = iter(ups)
-                seta_valida = False #variável para checar se alguma seta é válida (no caso de múltiplas setas do mesmo tipo)
-                for i in range(len(ups)):
-                    up = next(ups_iter)
+                if event.key == pygame.K_UP:
 
-                    if up.state == True:
-                        assets['score']+=100
-                        up.state = False
-                        up.kill()
-                        assets['hihat'].play()
-                        animation.kill()
-                        animation = Up(assets)
-                        animations.add(animation)
-                        seta_valida = True
-                    
-                    #código que penaliza ficar spammando o botão
-                    elif seta_valida == False:
-                        assets['score']-=10
-                        assets['button'].play()
+                    #iteração (gambiarra do pygame para verificar cada seta)
+                    ups_iter = iter(ups)
+                    seta_valida = False #variável para checar se alguma seta é válida (no caso de múltiplas setas do mesmo tipo)
+                    for i in range(len(ups)):
+                        up = next(ups_iter)
 
-            if event.key == pygame.K_DOWN:
+                        if up.state == True:
+                            assets['score']+=100
+                            up.state = False
+                            up.kill()
+                            assets['hihat'].play()
+                            animation.kill()
+                            animation = Up(assets)
+                            animations.add(animation)
+                            seta_valida = True
+                        
+                        #código que penaliza ficar spammando o botão
+                        elif seta_valida == False:
+                            assets['score']-=10
+                            assets['button'].play()
 
-                #iteração (gambiarra do pygame para verificar cada seta)
-                downs_iter = iter(downs)
-                seta_valida = False #variável para checar se alguma seta é válida (no caso de múltiplas setas do mesmo tipo)
-                for i in range(len(downs)):
-                    down = next(downs_iter)
+                if event.key == pygame.K_DOWN:
 
-                    if down.state == True:
-                        assets['score']+=100
-                        down.state = False
-                        down.kill()
-                        assets['hihat'].play()
-                        animation.kill()
-                        animation = Down(assets)
-                        animations.add(animation)
-                        seta_valida = True
-                    
-                    #código que penaliza ficar spammando o botão
-                    elif seta_valida == False:
-                        assets['score']-=10
-                        assets['button'].play()
+                    #iteração (gambiarra do pygame para verificar cada seta)
+                    downs_iter = iter(downs)
+                    seta_valida = False #variável para checar se alguma seta é válida (no caso de múltiplas setas do mesmo tipo)
+                    for i in range(len(downs)):
+                        down = next(downs_iter)
 
-            if event.key == pygame.K_SPACE:
-                pygame.mixer.music.play()
-                dic = dict()
-                assets['score']=0
+                        if down.state == True:
+                            assets['score']+=100
+                            down.state = False
+                            down.kill()
+                            assets['hihat'].play()
+                            animation.kill()
+                            animation = Down(assets)
+                            animations.add(animation)
+                            seta_valida = True
+                        
+                        #código que penaliza ficar spammando o botão
+                        elif seta_valida == False:
+                            assets['score']-=10
+                            assets['button'].play()
+
+                if event.key == pygame.K_SPACE:
+                    pygame.mixer.music.play()
+                    dic = dict()
+                    assets['score']=0
+            
+                        
         
-                    
-    
-    ##dando update nas classes de seta
-    all_sprites.update(assets, animation)
-    animations.update()
+        ##dando update nas classes de seta
+        all_sprites.update(assets, animation)
+        animations.update()
 
-    window.fill((0, 0, 255))
-    window.blit(assets['icy_night'], (0, 0))
+        window.fill((0, 0, 255))
+        window.blit(assets['icy_night'], (0, 0))
 
-    ##mostrando a imagem das setas vazias
-    window.blit(setaleftspace.image, setaleftspace.rect)
-    window.blit(setaupspace.image,setaupspace.rect)
-    window.blit(setadownspace.image,setadownspace.rect)
-    window.blit(setarightspace.image, setarightspace.rect)
-    
-    # Previne o score de ser negativo
-    if assets['score']<0:
-        assets['score']=0
+        ##mostrando a imagem das setas vazias
+        window.blit(setaleftspace.image, setaleftspace.rect)
+        window.blit(setaupspace.image,setaupspace.rect)
+        window.blit(setadownspace.image,setadownspace.rect)
+        window.blit(setarightspace.image, setarightspace.rect)
+        
+        # Previne o score de ser negativo
+        if assets['score']<0:
+            assets['score']=0
 
-    text_surface = assets['score_font'].render("{:08d}".format(assets['score']), True, (255, 255, 0))
-    text_rect = text_surface.get_rect()
-    text_rect.midtop = (WIDTH / 2,  10)
-    window.blit(text_surface, text_rect)
+        text_surface = assets['score_font'].render("{:05d}".format(assets['score']), True, (255, 255, 0))
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (WIDTH / 2,  10)
+        window.blit(text_surface, text_rect)
 
-    ##mostrando a imagem das setas
-    all_sprites.draw(window)
-    animations.draw(window)
+        ##mostrando a imagem das setas
+        all_sprites.draw(window)
+        animations.draw(window)
 
     
     pygame.display.update()

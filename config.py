@@ -14,3 +14,8 @@ FPS = 60
 # Tamanhos
 button_width = 64 #Largura da seta
 button_height = 64 #Altura da tela
+
+INIT = 0
+PLAYING = 1
+SCORING = 2
+QUIT = 3

@@ -228,7 +228,7 @@ class Idle(pygame.sprite.Sprite):
         # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
         # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
         # próxima imagem da animação será mostrada
-        self.frame_ticks = 450
+        self.frame_ticks = 400
 
     def update(self):
         # Verifica o tick atual.
@@ -249,6 +249,53 @@ class Idle(pygame.sprite.Sprite):
 
             center = self.rect.center
             self.image = self.idle_anim[self.frame]
+            self.rect = self.image.get_rect()
+            self.rect.center = center
+
+# Classe da animação idle
+class Big_Idle(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def __init__(self, assets):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Armazena a animação de idle
+        self.big_idle_anim = assets['big_idle_anim']
+
+        # Inicia o processo de animação colocando a primeira imagem na tela.
+        self.frame = 0  # Armazena o índice atual na animação
+        self.image = self.big_idle_anim[self.frame]  # Pega a primeira imagem
+        self.rect = self.image.get_rect()
+        self.rect.centery = 2*HEIGHT/3  # Posiciona o centro da imagem
+        self.rect.centerx = 2*WIDTH/2
+
+        # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
+        self.last_update = pygame.time.get_ticks()
+
+        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
+        # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
+        # próxima imagem da animação será mostrada
+        self.frame_ticks = 400
+
+    def update(self):
+        # Verifica o tick atual.
+        now = pygame.time.get_ticks()
+        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        elapsed_ticks = now - self.last_update
+
+        # Se já está na hora de mudar de imagem...
+        if elapsed_ticks > self.frame_ticks:
+            # Marca o tick da nova imagem.
+            self.last_update = now
+
+            # Avança um quadro.
+            if self.frame == 0:
+                self.frame = 1
+            else:
+                self.frame = 0
+
+            center = self.rect.center
+            self.image = self.big_idle_anim[self.frame]
             self.rect = self.image.get_rect()
             self.rect.center = center
 
@@ -506,3 +553,33 @@ class Miss(pygame.sprite.Sprite):
                 self.image = self.miss_anim[self.frame]
                 self.rect = self.image.get_rect()
                 self.rect.center = center
+
+# Classe de transição de cena
+class Transition(pygame.sprite.Sprite):
+    def __init__(self, assets):
+        #variável que vai ser usada para checar se já acabou
+        self.done = -1
+        
+        #construtor da classe mãe (Sprite)
+        pygame.sprite.Sprite.__init__(self)
+        self.assets = assets
+        self.image = assets['transition']
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.top = HEIGHT
+        self.speedy = -60
+        
+
+
+    def update(self):
+        # Atualizando a posição da seta
+        if self.done == 0 or self.done == 1:
+            self.rect.y += self.speedy
+        
+        if self.rect.centery <= HEIGHT/2:
+            self.done = 1
+
+        # Quando passar da tela, avisa
+        if self.rect.bottom < 0 and self.done == 1:
+            self.done = 2
+            self.rect.top = HEIGHT
