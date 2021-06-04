@@ -26,6 +26,8 @@ def load_assets():
     assets['icy_night'] = pygame.transform.scale(assets['icy_night'], (WIDTH, HEIGHT))
     assets['transition'] = pygame.image.load(os.path.join(IMG_DIR, 'transition.png')).convert_alpha()
     assets['transition'] = pygame.transform.scale(assets['transition'], (600, 1700))
+    assets['telafinal'] = pygame.image.load(os.path.join(IMG_DIR, 'telafinal.png')).convert_alpha()
+    assets['telafinal'] = pygame.transform.scale(assets['telafinal'], (500, 500))
     
     
     # sistema de placar
