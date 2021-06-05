@@ -1,9 +1,10 @@
 ##inicialização
 import pygame
+import os
 from música import dict, dic
-from config import WIDTH, HEIGHT, FPS, QUIT, INIT, PLAYING, SCORING
+from config import WIDTH, HEIGHT, FPS, QUIT, INIT, PLAYING, SCORING, SND_DIR
 from assets import load_assets
-from sprites import seta_left, seta_down, seta_up, seta_right, seta_down_space, seta_left_space, seta_right_space, seta_up_space, Idle, Big_Idle, Miss, Up, Down, Left, Right, Transition
+from sprites import PressSpace, seta_left, seta_down, seta_up, seta_right, seta_down_space, seta_left_space, seta_right_space, seta_up_space, Idle, Big_Idle, Miss, Up, Down, Left, Right, Transition
 
 # Começa 
 pygame.init()
@@ -33,13 +34,18 @@ downs = pygame.sprite.Group()
 
 all_sprites = pygame.sprite.Group()
 animations = pygame.sprite.Group()
+transitions = pygame.sprite.Group()
 
 keys_down = {}
 animation = Big_Idle(assets)
 animations.add(animation)
 transition = Transition(assets)
-animations.add(transition)
+transitions.add(transition)
+press_space = PressSpace(assets)
+animations.add(press_space)
 
+# Música da intro
+pygame.mixer.music.play(-1)
 
 # Loop principal---------------------------------------------------------------------------------------
 game = INIT
@@ -59,34 +65,44 @@ while game != QUIT:
                 if event.key == pygame.K_SPACE:
                     if transition.done == -1:
                         transition.done = 0
-                        assets['boom'].play()
+                        pygame.mixer.music.stop()
+                        pygame.mixer.music.load(os.path.join(SND_DIR, 'musica.mp3'))
+                        pygame.mixer.music.set_volume(0.2)
+                        assets['transition_sound'].play()
                     
         if transition.done == 1:
             game = PLAYING
             animation.kill()
+            press_space.kill()
+            animation = Idle(assets)
+            animations.add(animation)
         
         clock.tick(FPS)
         ##dando update nas classes
         all_sprites.update(assets, animation)
         animations.update()
+        transitions.update()
 
         window.fill((0, 0, 255))
+        window.blit(assets['icy_show'], (0, 0))
+        window.blit(assets['title'], (WIDTH/5+10, -60))
 
         ##mostrando a imagem das setas
         all_sprites.draw(window)
         animations.draw(window)
+        transitions.draw(window)
 
     elif game == PLAYING:
-        
+        # TRANSIÇÃO
+        # Se a transição acabou, começa a música
         if transition.done == 2:
             transition.done = -1
             pygame.mixer.music.play()
             dic = dict()
             assets['score']=0
-            animation = Idle(assets)
-            animations.add(animation)
+            
         
-
+        # JOGO
         # Se tiver um erro, toca a animação de erro
         if animation.frame == -2:
             animation.kill()
@@ -240,6 +256,7 @@ while game != QUIT:
         ##dando update nas classes de seta
         all_sprites.update(assets, animation)
         animations.update()
+        transitions.update()
 
         window.fill((0, 0, 255))
         window.blit(assets['icy_night'], (0, 0))
@@ -262,6 +279,7 @@ while game != QUIT:
         ##mostrando a imagem das setas
         all_sprites.draw(window)
         animations.draw(window)
+        transitions.draw(window)
 
     
     pygame.display.update()

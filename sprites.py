@@ -1,5 +1,5 @@
 import pygame
-from config import WIDTH, HEIGHT, button_width, button_height
+from config import HEIGHT, WIDTH, button_width, button_height
 
 
 
@@ -205,6 +205,8 @@ class seta_right_space(pygame.sprite.Sprite):
         self.rect.centerx = WIDTH/2+button_width
         self.rect.centery = HEIGHT/2
 
+
+# -------------------------------------ANIMAÇÕES------------------------------------------------
 # Classe da animação idle
 class Idle(pygame.sprite.Sprite):
     # Construtor da classe.
@@ -266,8 +268,7 @@ class Big_Idle(pygame.sprite.Sprite):
         self.frame = 0  # Armazena o índice atual na animação
         self.image = self.big_idle_anim[self.frame]  # Pega a primeira imagem
         self.rect = self.image.get_rect()
-        self.rect.centery = 2*HEIGHT/3  # Posiciona o centro da imagem
-        self.rect.centerx = 2*WIDTH/2
+        self.rect.midbottom = (WIDTH/2,HEIGHT+45)  # Posiciona o centro da imagem
 
         # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
         self.last_update = pygame.time.get_ticks()
@@ -557,8 +558,8 @@ class Miss(pygame.sprite.Sprite):
 # Classe de transição de cena
 class Transition(pygame.sprite.Sprite):
     def __init__(self, assets):
-        #variável que vai ser usada para checar se já acabou
-        self.done = -1
+        #variável que vai ser usada para checar em que parte a transição está
+        self.done = -1 #-1 = não começou, 0 = começou, 1 = no meio da tela, 2 = acabou
         
         #construtor da classe mãe (Sprite)
         pygame.sprite.Sprite.__init__(self)
@@ -568,18 +569,59 @@ class Transition(pygame.sprite.Sprite):
         self.rect.x = 0
         self.rect.top = HEIGHT
         self.speedy = -60
-        
-
 
     def update(self):
-        # Atualizando a posição da seta
+        # Atualizando a posição da transição se ela tiver começado ou se está no meio da tela
         if self.done == 0 or self.done == 1:
             self.rect.y += self.speedy
         
         if self.rect.centery <= HEIGHT/2:
             self.done = 1
 
-        # Quando passar da tela, avisa
+        # se passar da tela, avisa
         if self.rect.bottom < 0 and self.done == 1:
             self.done = 2
             self.rect.top = HEIGHT
+
+class PressSpace(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def __init__(self, assets):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        # Armazena a animação de idle
+        self.font = assets['score_font']
+
+        # Inicia o processo de animação colocando a primeira imagem na tela.
+        self.frame = 0  # Armazena o índice atual na animação
+        self.image = self.font.render("Press Space", True, (255,255,0))  # Pega a primeira imagem
+        self.rect = self.image.get_rect()
+        self.rect.center = (WIDTH/2,5*HEIGHT/6)  # Posiciona o centro da imagem
+
+        # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
+        self.last_update = pygame.time.get_ticks()
+
+        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
+        # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
+        # próxima imagem da animação será mostrada
+        self.frame_ticks = 400
+
+    def update(self):
+        # Verifica o tick atual.
+        now = pygame.time.get_ticks()
+        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        elapsed_ticks = now - self.last_update
+
+        # Se já está na hora de mudar de imagem...
+        if elapsed_ticks > self.frame_ticks:
+            # Marca o tick da nova imagem.
+            self.last_update = now
+
+            # Avança um quadro.
+            if self.frame == 0:
+                self.frame = 1
+                self.image = self.font.render("", True, (255,255,0))  # Pega a primeira imagem
+            else:
+                self.frame = 0
+                self.image = self.font.render("Press Space", True, (255,255,0))  # Pega a primeira imagem
+            

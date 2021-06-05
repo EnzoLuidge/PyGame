@@ -24,8 +24,12 @@ def load_assets():
     assets['down_space'] = pygame.transform.scale(assets['down_space'], (button_width, button_height))
     assets['icy_night'] = pygame.image.load(os.path.join(IMG_DIR, 'icy_night.png')).convert_alpha()
     assets['icy_night'] = pygame.transform.scale(assets['icy_night'], (WIDTH, HEIGHT))
+    assets['icy_show'] = pygame.image.load(os.path.join(IMG_DIR, 'icy_show.png')).convert_alpha()
+    assets['icy_show'] = pygame.transform.scale(assets['icy_show'], (WIDTH, HEIGHT))
     assets['transition'] = pygame.image.load(os.path.join(IMG_DIR, 'transition.png')).convert_alpha()
     assets['transition'] = pygame.transform.scale(assets['transition'], (600, 1700))
+    assets['title'] = pygame.image.load(os.path.join(IMG_DIR, 'title.png')).convert_alpha()
+    assets['title'] = pygame.transform.scale(assets['title'], (350, 350))
     
     
     # sistema de placar
@@ -33,9 +37,10 @@ def load_assets():
     assets['score'] = 0
 
     # Sons serelepes
-    pygame.mixer.music.load(os.path.join(SND_DIR, 'musica.mp3'))
-    pygame.mixer.music.set_volume(0.2)
+    pygame.mixer.music.load(os.path.join(SND_DIR, 'BeepBox_intro.wav'))
+    pygame.mixer.music.set_volume(0.5)
     assets['boom'] = pygame.mixer.Sound(os.path.join(SND_DIR, 'boom.wav'))
+    assets['transition_sound'] = pygame.mixer.Sound(os.path.join(SND_DIR, 'transition_sound.wav'))
     assets['hihat'] = pygame.mixer.Sound(os.path.join(SND_DIR, 'hihat.wav'))
     assets['button'] = pygame.mixer.Sound(os.path.join(SND_DIR, 'button.wav'))
 
@@ -54,7 +59,7 @@ def load_assets():
         # Os arquivos de animação são numerados de 00 a 01
         filename = os.path.join(ANIM_DIR, 'idle0{}.png'.format(i))
         img = pygame.image.load(filename).convert_alpha()
-        img = pygame.transform.scale(img, (400, 400))
+        img = pygame.transform.scale(img, (500, 500))
         big_idle_anim.append(img)
     assets["big_idle_anim"] = big_idle_anim
 
