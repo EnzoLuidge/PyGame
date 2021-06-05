@@ -31,12 +31,16 @@ def load_assets():
     assets['title'] = pygame.image.load(os.path.join(IMG_DIR, 'title.png')).convert_alpha()
     assets['title'] = pygame.transform.scale(assets['title'], (350, 350))
     assets['telafinal'] = pygame.image.load(os.path.join(IMG_DIR, 'telafinal.png')).convert_alpha()
-    assets['telafinal'] = pygame.transform.scale(assets['telafinal'], (500, 500))
+    assets['telafinal'] = pygame.transform.scale(assets['telafinal'], (600, 600))
+    
     
     
     # sistema de placar
     assets["score_font"] = pygame.font.Font(os.path.join(FNT_DIR, 'PressStart2P.ttf'), 28)
     assets['score'] = 0
+    assets['ice_font'] = pygame.font.Font(os.path.join(FNT_DIR, 'FROZBITE.ttf'),68)
+    assets['ice2_font'] = pygame.font.Font(os.path.join(FNT_DIR, 'FROZBITE.ttf'), 28)
+    assets['ice3_font'] = pygame.font.Font(os.path.join(FNT_DIR, 'FROZBITE.ttf'), 220)
 
     # Sons serelepes
     pygame.mixer.music.load(os.path.join(SND_DIR, 'BeepBox_intro.wav'))

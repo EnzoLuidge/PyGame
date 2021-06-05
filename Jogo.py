@@ -15,7 +15,7 @@ pygame.display.set_caption('Guitarzao')
 def Tempo(tempomusica):
     tempomusica = int(tempomusica)
     tempo = tempomusica-1585
-    return tempo
+    return tempo 
 
 # Carrega os assets
 assets = load_assets()
@@ -245,13 +245,13 @@ while game != QUIT:
                         elif seta_valida == False:
                             assets['score']-=10
                             assets['button'].play()
-
-                if event.key == pygame.K_SPACE:
-                    pygame.mixer.music.play()
-                    dic = dict()
-                    assets['score']=0
-            
-                        
+        ##quando a música acabar
+        if tempo_musica == -1:
+            transition.done = 0
+            transition.update()
+            if transition.done == 2:
+                game = 4
+                ##gameover                                
         
         ##dando update nas classes de seta
         all_sprites.update(assets, animation)
@@ -281,6 +281,85 @@ while game != QUIT:
         animations.draw(window)
         transitions.draw(window)
 
+    elif game == 4:#gameover
+        if transition.done == 2:
+            transition.done = -1
+
+        window.blit(assets['telafinal'], (0,0))
+
+        texto = assets['ice_font'].render('Seu score', True, (0,0,255))
+        texto2 = assets['ice_font'].render('foi de', True, (0,0,255))
+        texto3 = assets['ice_font'] .render("Logo a sua", True, (0,0,255))
+        texto4 = assets['ice_font'].render("nota foi...", True, (0,0,255))
+        texto5 = assets['ice2_font'].render("pressione espaco", True, (0,0,255))
+        if assets['score'] == 17900:
+            nota = assets['ice3_font'].render('S+', True, (153,204,50))
+
+        elif assets['score'] >= 15000 and assets['score'] <= 17900:
+            nota = assets['ice3_font'].render('S', True, (255,255,0))
+
+        elif assets['score'] >= 12000 and assets['score'] <= 14999:
+            nota = assets['ice3_font'].render('A', True, (0,255,0))
+        
+        elif assets['score'] >= 9000 and assets['score'] <= 11999:
+            nota = assets['ice3_font'].render('B', True, (0,0,255))
+        
+        elif assets['score'] >= 5000 and assets['score'] <= 9000:
+            nota = assets['ice3_font'].render('C', True, (255,0,0))
+        
+        else:
+            nota = assets['ice3_font'].render('D', True, (0,0,0))
+
+        text_surface = assets['ice_font'].render("{:05d}".format(assets['score']), True, (0,0,255))
+        text_rect = text_surface.get_rect()
+ 
+
+        text_rect.midtop = (300, 350)
+        window.blit(text_surface, text_rect)
+        window.blit(texto, (50,170))
+        window.blit(texto2, (140,230))
+
+        window.blit(texto5,(130,500)) 
+        pygame.display.update()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game = QUIT
+            if event.type == pygame.KEYDOWN:
+                keys_down[event.key] = True
+                if event.key == pygame.K_SPACE:
+                    game = 5##gameover2
+                    window.blit(assets['telafinal'],(0,0))
+
+                    
+    elif game == 5:
+        if event.type == pygame.QUIT:
+            game = QUIT
+        window.blit(texto3,(30,170))
+        window.blit(texto4,(60,230))
+        window.blit(texto5,(130,500))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    game = 6
+                    window.blit(assets['telafinal'],(0,0))
+
     
+    elif game == 6:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game = QUIT
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    game = INIT
+        if nota == 'S+':
+            window.blit(texto5,(130,500))
+            window.blit(nota,(120,180))
+        else:
+            window.blit(texto5,(130,500))
+            window.blit(nota,(210,180))
+        pygame.display.update()
+                    
     pygame.display.update()
-pygame.quit()
+pygame.quit() 
