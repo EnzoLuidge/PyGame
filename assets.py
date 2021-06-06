@@ -38,7 +38,7 @@ def load_assets():
     # sistema de placar
     assets["score_font"] = pygame.font.Font(os.path.join(FNT_DIR, 'PressStart2P.ttf'), 28)
     assets['score'] = 0
-    assets['ice_font'] = pygame.font.Font(os.path.join(FNT_DIR, 'FROZBITE.ttf'),68)
+    assets['ice_font'] = pygame.font.Font(os.path.join(FNT_DIR, 'FROZBITE.ttf'), 60)
     assets['ice2_font'] = pygame.font.Font(os.path.join(FNT_DIR, 'FROZBITE.ttf'), 28)
     assets['ice3_font'] = pygame.font.Font(os.path.join(FNT_DIR, 'FROZBITE.ttf'), 220)
 
