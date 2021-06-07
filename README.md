@@ -1,9 +1,9 @@
 # PyGame
 
 
-Icy Rhythm Penguin Hero
+**Icy Rhythm Penguin Hero**
 
-Integrantes:  Enzo Luigde, Thiago Teixeira, Pedro Henrique Sousa
+_Integrantes:  Enzo Luidge, Thiago Teixeira, Pedro Henrique Sousa_
 
 Icy Rhythm Penguin Hero, se a semelha à jogabilidade de outros jogos musicais, no qual o jogador deve pressionar as setas do teclado enquanto as flechas se movem na tela do jogo para completar a música. A sequência das flechas é mostrada na tela, com a combinação de cor e posição, as quais partem dos 4 sentidos, se direcionando ao centro, e quando as mesmas atingem uma área demarcada, neste momento, o jogador deve pressionar a tecla que indica o mesmo sentido da flecha.
 
@@ -15,12 +15,17 @@ Ao começar o jogo, haverá uma tela de abertura, que ao apetar a tecla da Barra
 A inspiração de Icy Rhythm Penguin Hero, foi Guitar Hero e Friday Night Funkin.
 
 
-Descrição das pastas:
+**Dependências**:
+ - Para inicializar o jogo, antes, é necessário instalar a biblioteca _Pygame_. Para isso, abra o seu terminal (Linux ou MacOS) ou Anaconda Prompt (Windows) e digite: pip install pygame. Pronto, deste modo, você conseguirá iniciar o jogo.
+
+**Descrição das pastas**
  - 'assets.py': Define as imagens, os sons e as animações.
  - 'config.py': Configura alguns dados.
- - 'jogo.py': Compila toda a programação para o jogo
+ - 'jogo.py': Compila toda a programação para o jogo. Utilize este código para inicializar o jogo.
  - 'música.py': Define a música inteira.
  - 'sprites.py': Define as classes.
 
-Fonte utilizada:
+**Fonte utilizada**
  - Música: https://www.youtube.com/watch?v=ox_T5Ia_Y0A&list=RDQM_yipwNC-v0o&start_radio=1
+ - Fonte de texto: https://www.dafont.com/pt/theme.php?cat=111
+ - As animações, transição, backgrounds e a imagem do pinguim foram feitas pelos integrantes do grupo.
