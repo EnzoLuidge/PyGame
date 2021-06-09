@@ -12,7 +12,7 @@ A pontuação funciona da seguinte forma, se ao pressionar a tecla atingir a fle
 Ao começar o jogo, haverá uma tela de abertura, que ao apetar a tecla da Barra de espaços começará abrindo a tela do jogo. A partida só irá se encerrar com o término da música, abrindo no monitor a tela com os pontos obtidos na partida e a nota recebida.
 
 Todas as animações, transições, backgrounds e a imagem do pinguim foram feitas pelos integrantes do grupo.
-![alt text](https://imgur.com/a/YpUHEZ6)
+![Construindo animação](https://user-images.githubusercontent.com/81188402/121281705-b6b34a00-c8ae-11eb-82e2-11cf9aea7512.jpeg)
 
 
 A inspiração de Icy Rhythm Penguin Hero, foi Guitar Hero e Friday Night Funkin.
