@@ -29,3 +29,7 @@ A inspiração de Icy Rhythm Penguin Hero, foi Guitar Hero e Friday Night Funkin
  - Música: https://www.youtube.com/watch?v=ox_T5Ia_Y0A&list=RDQM_yipwNC-v0o&start_radio=1
  - Fonte de texto: https://www.dafont.com/pt/theme.php?cat=111
  - As animações, transição, backgrounds e a imagem do pinguim foram feitas pelos integrantes do grupo.
+
+**Vídeo**
+ - https://youtu.be/2CSOw7RATMM
+ 
