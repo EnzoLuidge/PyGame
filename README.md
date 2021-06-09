@@ -11,9 +11,11 @@ A pontuação funciona da seguinte forma, se ao pressionar a tecla atingir a fle
 
 Ao começar o jogo, haverá uma tela de abertura, que ao apetar a tecla da Barra de espaços começará abrindo a tela do jogo. A partida só irá se encerrar com o término da música, abrindo no monitor a tela com os pontos obtidos na partida e a nota recebida.
 
+Todas as animações, transições, backgrounds e a imagem do pinguim foram feitas pelos integrantes do grupo.
+<img src="/assets/img/Contruindo_animação.jpg" alt="Contruindo animação"/>
+
 
 A inspiração de Icy Rhythm Penguin Hero, foi Guitar Hero e Friday Night Funkin.
-
 
 **Dependências**:
  - Para inicializar o jogo, antes, é necessário instalar a biblioteca _Pygame_. Para isso, abra o seu terminal (Linux ou MacOS) ou Anaconda Prompt (Windows) e digite: pip install pygame. Pronto, deste modo, você conseguirá iniciar o jogo.
